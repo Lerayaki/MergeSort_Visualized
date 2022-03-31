@@ -1,4 +1,4 @@
-# Merge Sort Animation
+# Merge Sort Visualization
 
 Merge Sort algorithm visualized with python's matplotlib
 
