@@ -1,6 +1,5 @@
 import matplotlib.animation as ani
 import matplotlib.pyplot as plt
-import matplotlib.cbook as cbook
 import numpy as np
 
 def mergeSortSteps(a,b):
