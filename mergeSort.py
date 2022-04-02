@@ -1,64 +1,66 @@
+import string
+from timeit import repeat
+from turtle import width
 import matplotlib.animation as ani
 import matplotlib.pyplot as plt
 import numpy as np
 
-def mergeSortSteps(a,b):
-    global steps
-
-    if (a == b):
+def mergeSort(arr, a=None, b=None):
+    if a == None or b == None:
+        a = 0
+        b = len(arr)-1
+    if a >= b:
         return
     
-    mid = (b - a) // 2 + a
-    steps.append([mid+1,b])
-    mergeSortSteps(mid+1,b)
-    steps.append([a,mid])
-    mergeSortSteps(a,mid)
+    mid = (b-a) // 2 + a
 
-def merge(a,b):
-    global y
+    mergeSort(arr, a, mid)
+    mergeSort(arr, mid+1, b)
 
-    mid = (b - a) // 2 + a
-    aux = []
-    
     i = a
     j = mid+1
+    aux = []
 
     while (i <= mid or j <= b):
         if i > mid:
-            aux.append(y[j])
+            aux.append(arr[j])
             j = j+1
-            continue
-        if j > b:
-            aux.append(y[i])
+        elif j > b:
+            aux.append(arr[i])
             i = i+1
-            continue
-        if y[i] < y[j]:
-            aux.append(y[i])
+        elif arr[i] < arr[j]:
+            aux.append(arr[i])
             i = i+1
         else:
-            aux.append(y[j])
+            aux.append(arr[j])
             j = j+1
 
-    y[a:b+1] = np.array(aux)
+    arr[a:b+1] = np.array(aux)
 
-def mergeSort(i=int):
-    merge(steps[i][0], steps[i][1])
-    fig.clear()
-    p = plt.bar(x,y, align='edge', width=1.01)
+    global states
+    states.append(list(arr))
     
+def update(i=int):
+    global size
+    plt.clf()
+    p = plt.bar(range(size), states[i], width=1)
 #######################################
 
-size = 1024
-y = np.random.default_rng().uniform(0,1,size)
-x = np.arange(size)
+size = 128
+arr = np.arange(1, size+1)
+np.random.shuffle(arr)
+states = [list(arr)]
 
-steps = [[0, size-1]]
-mergeSortSteps(0, size-1)
-steps.reverse()
-print('size: ', len(steps))
+figure, axis = plt.subplots(1,2, figsize=(12,5))
+axis[0].bar(range(size), arr, width=1)
+
+mergeSort(arr)
+
+axis[1].bar(range(size), arr, width=1)
+plt.show()
 
 fig = plt.figure()
-animator = ani.FuncAnimation(fig, mergeSort, frames=len(steps), interval=0.2)
+animator = ani.FuncAnimation(fig, update, frames=len(states) , interval=50, repeat=False)
 
-# plt.show()
-animator.save(r'mergeSort-{}.gif'.format(size))
+plt.show()
+# # animator.save(r'mergeSort-{}.gif'.format(size))
