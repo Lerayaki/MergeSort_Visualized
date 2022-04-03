@@ -100,7 +100,7 @@ def update(i=int):
 #######################################
 
 fps = 60
-size = 64
+size = 256
 arr = np.arange(1, size+1)
 np.random.shuffle(arr)
 arr = TrackedArray(arr)
@@ -123,4 +123,4 @@ txt = ax.text(0,int(size*1.05),"")
 
 anim = ani.FuncAnimation(fig, update, frames=len(arr.full_copies), blit=True, interval=1000/fps, repeat=False)
 # plt.show()
-anim.save(f'mergeSort-{size}.gif')
+anim.save(f'mergeSort-{size}.gif', fps=min(50,fps))
